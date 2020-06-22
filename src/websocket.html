@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .input-content{
+            width: 300px;
+            height: 300px;
+            border: 1px solid #42b983;
+        }
+    </style>
+</head>
+<body>
+<input placeholder="请输入内容"/>
+<button id="btn">发送</button>
+<!--显示发送的内容-->
+<div class="input-content"></div>
+
+</body>
+<script>
+    const content = document.querySelector('.input-content')
+    const btn = document.querySelector('#btn')
+    const input = document.querySelector('input')
+    // const webSocket = new WebSocket("ws://echo.websocket.org")
+    const webSocket = new WebSocket("ws://localhost:3000")
+    webSocket.addEventListener('open', function (event) {
+        content.innerHTML = '连接服务成功了'
+    });
+    btn.addEventListener('click', function () {
+        const value = input.value
+        webSocket.send(value)
+    })
+
+    webSocket.addEventListener('message', function (event) {
+        content.innerHTML += `<p>${JSON.parse(event.data).msg}</p>`
+    });
+</script>
+</html>

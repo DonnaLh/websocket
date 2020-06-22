@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div>
+    <button id="btn">登录</button>
+    <label for="uploadFile">
+        <input type="file" id="uploadFile"/>
+    </label>
+</div>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    // import socketIo from "./components/socketIo";
+
+    const btn = document.querySelector('button')
+    const file = document.getElementById('uploadFile')
+    // 连接到服务器
+    const socket = io("http://localhost:3001")
+    btn.addEventListener('click', function () {
+        socket.emit("login", {name: 'hhh'})
+    })
+
+    // 接收服务器返回的数据
+    socket.on('addUser', function (data) {
+        console.log(`${data.name}登录成功`)
+    })
+    socket.on('send', function (data) {
+        console.log(data)
+    })
+    socket.on('userImage', function (data) {
+        console.log(data, '图片信息')
+    })
+    file.addEventListener('change', function () {
+        const file = this.files[0]
+        // 读取文件
+        const fr = new FileReader()
+        fr.readAsDataURL(file)
+        fr.onload = function () {
+            // 拿到文件的数据
+            socket.emit("file", {
+                url: fr.result
+            })
+        }
+    })
+</script>
+</body>
+</html>
