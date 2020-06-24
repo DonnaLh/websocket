@@ -1,21 +1,24 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Login from '../views/login.vue'
-
 Vue.use(VueRouter)
 
-  const routes = [
-  {
-    path: '/',
-    name: 'Login',
-    component: Login
-  },
-  {
-    path: '/message',
-    name: 'Message',
-    component: () => import(/* webpackChunkName: "about" */ '../views/message.vue')
-  }
-]
+const files = require.context('.', true, /\.js$/)
+
+console.log(files.keys(), files) // ["./home.js"] 返回一个数组
+
+let configRouters = []
+/**
+ * inject routers
+ */
+files.keys().forEach(key => {
+  if (key.includes('index.js')) return
+  configRouters = configRouters.concat(files(key).default) // 读取出文件中的default模块
+})
+
+console.log(configRouters, 'configRouters')
+
+
+const routes = configRouters
 
 const router = new VueRouter({
   mode: 'history',

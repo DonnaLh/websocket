@@ -87,7 +87,13 @@
                 this.$refs.msgWrap[len].scrollIntoView(false)
             })
 
+            this.sockets.listener.subscribe("msg", (name)=>{
+                let arr = this.msgList;
+                arr.push(name)
+            })
+
         },
+        //
         methods: {
             sendMsg(){
                 this.$socket.emit('msg',{
