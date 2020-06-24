@@ -75,6 +75,8 @@
             ...mapGetters(['msgList', 'myname', 'userlist'])
         },
         mounted() {
+
+            console.log('测试数据');
             this.sockets.listener.subscribe("userList", (data)=>{
                 this.$store.commit('USER_LIST', data)
             })
@@ -117,7 +119,7 @@
 
             },
             getImage(img){
-                return require(`../assets/imgs/${img}.png`)
+                return require(`../../assets/imgs/${img}.png`)
             }
         }
     }

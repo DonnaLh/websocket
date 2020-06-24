@@ -1,4 +1,4 @@
-import copyText from '@/views/copyText'
+import copyText from '@/views/copyText/index'
 
 export default {
     path: '/copy-text',

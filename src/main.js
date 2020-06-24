@@ -3,6 +3,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import VueSocketio from 'vue-socket.io'
+import './components/index'
 import socketio from 'socket.io-client'
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';

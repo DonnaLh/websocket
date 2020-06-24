@@ -4,7 +4,13 @@
 
 <script>
     export default {
-        name: "index"
+        name: "index",
+        data(){
+            return {}
+        },
+        mounted() {
+            console.log('测试mixins')
+        }
     }
 </script>
 

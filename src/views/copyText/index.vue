@@ -5,10 +5,36 @@
 </template>
 
 <script>
+    import listMixins from '@/mixins/list'
     export default {
         name: "copyText",
-        data(){},
+        mixins: [listMixins],
+        data(){
+            return {}
+        },
+        mounted() {
+            console.log('测试复制文本功能')
+            this.load()
+        },
         methods: {
+            load() {
+                this.loading = true
+                setTimeout(() => {
+                    this.loading = false
+                    // 这个已经在mixins中声明了
+                    for (let index = 0; index < 14; index++) {
+                        this.list.push({
+                            loginName: `admin${index}`,
+                            userName: `user${index}`,
+                            roleName: `role${index}`,
+                            createDate: new Date().getTime(),
+                            id: index
+                        })
+                    }
+
+                    console.log(this.list, 'list')
+                }, 2000)
+            },
             // 一键复制
             async copyText () {
                 let {data: copy} = {
@@ -27,11 +53,13 @@
                 if (!text) {
                     text = document.createElement('textarea')
                     text.id = 'copy-area'
+                    // text.style.display = 'none'
                     document.body.appendChild(text)
                 }
                 text.value = copyTexts
                 text.select()
                 document.execCommand('Copy')
+                document.body.removeChild(text);
                 this.success(copyTexts)
             },
             // 提示信息
