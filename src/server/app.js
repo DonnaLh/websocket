@@ -1,8 +1,14 @@
 var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
+
+// var testController = require('./testController');
+// app.post('/dataInpute',testController.dataInput);
+
 let userList = []
 let userInfo = []
+
+
 io.on('connection',function(socket) {
     console.log('建立连接')
     //接收数据

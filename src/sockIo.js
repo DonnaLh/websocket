@@ -6,15 +6,35 @@
 const app = require('express')();
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
+const moment = require('moment');
+
+const path = require("path")
+const fs = require("fs")
 
 server.listen(3001);
 // WARNING: app.listen(80) will NOT work here!
 
 // app.use(require('express').static('public')) 把public目录设置为静态资源目录
-
+/*
+*  协商缓存 Last-Modified
+* */
 app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/sockIo.html');
-    // res.redirect("/sockIo.html") 重定向
+    // res.sendFile(__dirname + '/sockIo.html');
+    let jsPath = path.resolve(__dirname, __dirname + '/sockIo.html')
+    let cont = fs.readFileSync(jsPath)
+
+    let status = fs.statSync(jsPath)
+    let lastModified = status.mtime.toUTCString()
+    if(lastModified === req.headers['if-modified-since']){
+        res.writeHead(304, 'Not Modified')
+        res.end()
+    } else {
+        res.setHeader('Cache-Control', 'public,max-age=5')
+        res.setHeader('Last-Modified', lastModified)
+        res.writeHead(200, 'OK')
+        res.end(cont)
+    }
+
 });
 
 

@@ -3,7 +3,7 @@
 
 ## 启动功能
 
-1. 启动src/serve/app.js  
+1. 启动src/serve/app1.js  
 
 2. 地址localhost:8081/message
 ```

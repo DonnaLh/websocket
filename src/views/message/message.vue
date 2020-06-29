@@ -74,9 +74,26 @@
         computed: {
             ...mapGetters(['msgList', 'myname', 'userlist'])
         },
+        watch: {
+            msgList: {
+                handler(newVal){
+                    if(this.$refs.msgWrap){
+                        const len = this.$refs.msgWrap.length - 1
+                        if(newVal[len].type === 'msg'){
+                            let oParents = this.$refs.msgWrap[len]
+                            console.log(oParents, 123)
+                        } else {
+                            this.$refs.msgWrap[len].scrollIntoView(false)
+                        }
+
+
+                    }
+                },
+                deep: true
+            }
+        },
         mounted() {
 
-            console.log('测试数据');
             this.sockets.listener.subscribe("userList", (data)=>{
                 this.$store.commit('USER_LIST', data)
             })
@@ -85,13 +102,6 @@
                 let arr = this.msgList
                 arr.push(data)
                 this.$store.commit('MSG_LIST', arr)
-                const len = this.$refs.msgWrap.length - 1
-                this.$refs.msgWrap[len].scrollIntoView(false)
-            })
-
-            this.sockets.listener.subscribe("msg", (name)=>{
-                let arr = this.msgList;
-                arr.push(name)
             })
 
         },
