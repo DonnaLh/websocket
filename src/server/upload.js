@@ -1,26 +1,25 @@
+const app = require('express')();
+const server = require('http').Server(app);
 
-var  multer=require('multer');
-var storage = multer.diskStorage({
-    //设置上传后文件路径，uploads文件夹会自动创建。
-    destination: function (req, file, cb) {
-        cb(null, './public/uploads')
-    },
-    //给上传文件重命名，获取添加后缀名
-    filename: function (req, file, cb) {
-        var fileFormat = (file.originalname).split(".");
-        cb(null, file.fieldname + '-' + Date.now() + "." + fileFormat[fileFormat.length - 1]);
-    }
-});
-//添加配置文件到muler对象。
-var upload = multer({
-    storage: storage
-});
+server.listen(3009);
 
-//如需其他设置，请参考multer的limits,使用方法如下。
-//var upload = multer({
-//    storage: storage,
-//    limits:{}
-// });
+var express = require('express');
+var router = express.Router();
+var multer = require('multer');
+const path = require("path")
+const fs = require("fs")
 
-//导出对象
-module.exports = upload;
+var uploading = multer({
+    dest: __dirname + '../../public/uploads/',
+    // 设定限制，每次最多上传1个文件，文件大小不超过1MB
+    limits: {fileSize: 1000000, files:1},
+})
+
+router.post('/upload', uploading, function(req, res) {
+    // console.log(req, res)
+    let jsPath = path.resolve(__dirname, __dirname + '/upload.html')
+    let cont = fs.readFileSync(jsPath)
+    res.end(cont)
+})
+
+// module.exports = router
